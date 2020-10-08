@@ -1,0 +1,26 @@
+version: '3'
+services:
+  nginx:
+    container_name: mai-backend-nginx
+    image: nginx:1.19.2
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./static:/var/www/static
+    depends_on:
+      - app
+
+  app:
+    restart: always
+    working_dir: /project
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/project
+    expose:
+      - "8080"
+    command: ./gradlew bootRun
+
